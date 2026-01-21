@@ -5,6 +5,27 @@
 <title>Người đẹp nhất thế gian 💌</title>
 
 <style>
+
+.heart {
+    position: absolute;
+    pointer-events: none;
+    animation: heartFloat linear forwards;
+}
+
+@keyframes heartFloat {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: 
+            translate(var(--x), var(--y))
+            scale(1.6)
+            rotate(360deg);
+        opacity: 0;
+    }
+}
+
 body {
     margin: 0;
     height: 100vh;
@@ -116,24 +137,42 @@ body {
 
 <script>
 
-function createHearts() {
-    for (let i = 0; i < 11; i++) {
+function createRandomHearts(count = 12) {
+    const scene = document.querySelector('.scene');
+
+    for (let i = 0; i < count; i++) {
         const heart = document.createElement('span');
         heart.className = 'heart';
-        heart.innerText = '❤️';
+        heart.textContent = '❤️';
 
-        // vị trí ngẫu nhiên quanh envelope
-        heart.style.left = Math.random() * 350 + 'px';
-        heart.style.top = '180px';
+        // vị trí xuất hiện ngẫu nhiên trong scene
+        const startX = Math.random() * scene.clientWidth;
+        const startY = Math.random() * 80 + 150;
 
-        document.querySelector('.scene').appendChild(heart);
+        heart.style.left = startX + 'px';
+        heart.style.top = startY + 'px';
 
-        // tự xoá sau animation
-        setTimeout(() => {
-            heart.remove();
-        }, 2000);
+        // hướng bay ngẫu nhiên
+        const moveX = (Math.random() * 200 - 100) + 'px';
+        const moveY = -(Math.random() * 150 + 150) + 'px';
+
+        heart.style.setProperty('--x', moveX);
+        heart.style.setProperty('--y', moveY);
+
+        // ngẫu nhiên size & thời gian
+        const size = Math.random() * 14 + 18;
+        const duration = Math.random() * 1.5 + 1;
+
+        heart.style.fontSize = size + 'px';
+        heart.style.animationDuration = duration + 's';
+
+        scene.appendChild(heart);
+
+        // tự xoá
+        setTimeout(() => heart.remove(), duration * 1000);
     }
 }
+
 
 let clickCount = 0;
 
@@ -149,7 +188,7 @@ envelope.addEventListener('click', () => {
     else if (clickCount === 2) {
         envelope.classList.add('fall');
         letter.classList.add('show');
-        createHearts(); // 💖 TRÁI TIM BAY
+        createRandomHearts(15); // 💖 TRÁI TIM BAY
     }
 });
 </script>
