@@ -1,35 +1,116 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Slide Web PowerPoint</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Thiệp Tình Yêu 💌</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: pink;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .envelope {
+        position: relative;
+        width: 300px;
+        height: 200px;
+        background: #ff6f91;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    .envelope::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-top: 100px solid #ff3f6c;
+        transform-origin: top;
+        transition: 0.5s;
+    }
+
+    .envelope.open::before {
+        transform: rotateX(180deg);
+    }
+
+    .letter {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        width: 280px;
+        height: 180px;
+        background: white;
+        transform: translateY(100%);
+        transition: 0.5s;
+        padding: 15px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .letter.show {
+        transform: translateY(0);
+    }
+
+    .content {
+        opacity: 0;
+        transition: 0.5s;
+        font-size: 16px;
+        color: #ff3f6c;
+        text-align: center;
+    }
+
+    .content.show {
+        opacity: 1;
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
+</style>
 </head>
 <body>
 
-<div id="slides">
-
-  <!-- SLIDE 1 -->
-  <section class="slide active">
-    <h1 class="step">Bài thuyết trình Web</h1>
-    <p class="step">Làm giống PowerPoint bằng HTML</p>
-  </section>
-
-  <!-- SLIDE 2 -->
-  <section class="slide">
-    <h2 class="step">Cơ chế hoạt động</h2>
-    <img class="step from-left" src="images/img1.png">
-    <img class="step from-right" src="images/img2.png">
-  </section>
-
-  <!-- SLIDE 3 -->
-  <section class="slide">
-    <h2 class="step zoom">Cảm ơn bạn!</h2>
-    <p class="step">GitHub Pages + Slide Web</p>
-  </section>
-
+<div class="envelope" id="envelope">
+    <div class="letter" id="letter">
+        <div class="content" id="content">
+            <h2>💖 Gửi người anh yêu 💖</h2>
+            <p>
+                Anh không giỏi nói lời ngọt ngào,<br>
+                nhưng anh thật lòng yêu em rất nhiều.<br><br>
+                Cảm ơn em đã đến bên anh 🌷
+            </p>
+        </div>
+    </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+    let clickCount = 0;
+    const envelope = document.getElementById('envelope');
+    const letter = document.getElementById('letter');
+    const content = document.getElementById('content');
+
+    envelope.addEventListener('click', () => {
+        clickCount++;
+
+        if (clickCount === 1) {
+            envelope.classList.add('open');
+        } 
+        else if (clickCount === 2) {
+            letter.classList.add('show');
+        } 
+        else if (clickCount === 3) {
+            content.classList.add('show');
+        }
+    });
+</script>
+
 </body>
 </html>
