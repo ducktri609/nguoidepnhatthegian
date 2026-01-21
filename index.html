@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Người đẹp nhất thế gian 💌</title>
+<title>Nguoidepnhatthegian 💌</title>
 <style>
     body {
         margin: 0;
@@ -23,7 +23,7 @@
         transition: 0.5s;
     }
 
-    .envelope::before {
+    .envelope{
         content: '';
         position: absolute;
         top: 0;
@@ -37,26 +37,27 @@
         transition: 0.5s;
     }
 
-    .envelope.open::before {
+    .envelope.open {
         transform: rotateX(180deg);
     }
-    .envelope.show {
-        transform: translateY(500%);
-    }
 
-    .letter {
-        position: relative;
+    .letter:before {
+        position: absolute;
         bottom: 10px;
         left: 10px;
         width: 280px;
         height: 180px;
         background: white;
+        transform: translateY(100%);
         transition: 0.5s;
         padding: 15px;
         box-sizing: border-box;
         overflow: hidden;
     }
 
+    .letter.show:before {
+        transform: translateY(0);
+    }
 
     .content {
         opacity: 0;
@@ -103,7 +104,7 @@
             envelope.classList.add('open');
         } 
         else if (clickCount === 2) {
-            envelope.classList.add('show');
+            letter.classList.add('show');
         } 
         else if (clickCount === 3) {
             content.classList.add('show');
