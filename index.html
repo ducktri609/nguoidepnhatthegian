@@ -15,7 +15,7 @@
     }
 
     .envelope {
-        position: relative;
+        position: absolute;
         width: 300px;
         height: 200px;
         background: #ff6f91;
@@ -23,7 +23,7 @@
         transition: 0.5s;
     }
 
-    .envelope::before {
+    .envelope {
         content: '';
         position: absolute;
         top: 0;
@@ -37,7 +37,7 @@
         transition: 0.5s;
     }
 
-    .envelope.open::before {
+    .envelope.open{
         transform: rotateX(180deg);
     }
 
