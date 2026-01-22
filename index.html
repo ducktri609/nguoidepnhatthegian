@@ -5,7 +5,7 @@
 <title>Người đẹp nhất thế gian 💌</title>
 
 <style>
-
+/* ================= HEART ================= */
 .heart {
     z-index: 3;
     position: absolute;
@@ -19,14 +19,12 @@
         opacity: 1;
     }
     100% {
-        transform: 
-            translate(var(--x), var(--y))
-            scale(1.6)
-            rotate(360deg);
+        transform: translate(var(--x), var(--y)) scale(1.6) rotate(360deg);
         opacity: 0;
     }
 }
 
+/* ================= BODY ================= */
 body {
     margin: 0;
     height: 100vh;
@@ -35,16 +33,79 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
 }
 
-/* Scene */
+/* ================= LOCK ================= */
+.lock-container {
+    position: absolute;
+    z-index: 5;
+    text-align: center;
+    transition: transform 1s ease-in;
+}
+
+.lock {
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+
+.display {
+    height: 30px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    letter-spacing: 5px;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    gap: 10px;
+    justify-content: center;
+}
+
+.keypad button {
+    height: 60px;
+    border-radius: 8px;
+    border: none;
+    font-size: 18px;
+    background: #ff6f91;
+    color: white;
+    cursor: pointer;
+}
+
+.keypad button:hover {
+    background: #ff3f6c;
+}
+
+.delete {
+    background: #ff4444;
+}
+
+.wide {
+    grid-column: span 3;
+    background: #0066ff;
+}
+
+.lock-container.fall {
+    transform: translateY(120vh) rotate(20deg);
+}
+
+/* ================= SCENE ================= */
 .scene {
     position: relative;
     width: 300px;
     height: 300px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 1s;
 }
 
-/* ENVELOPE */
+.scene.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ================= ENVELOPE ================= */
 .envelope {
     position: absolute;
     top: 0;
@@ -59,14 +120,11 @@ body {
 .envelope::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
     width: 0;
     height: 0;
     border-left: 150px solid transparent;
     border-right: 150px solid transparent;
     border-top: 100px solid #ff3f6c;
-    transform-origin: top;
     transition: 0.5s;
 }
 
@@ -74,7 +132,6 @@ body {
     transform: rotateX(180deg);
 }
 
-/* Envelope rơi */
 .envelope.fall {
     animation: fallDown 1s forwards;
 }
@@ -86,7 +143,7 @@ body {
     }
 }
 
-/* LETTER */
+/* ================= LETTER ================= */
 .letter {
     position: absolute;
     top: 20px;
@@ -94,8 +151,6 @@ body {
     width: 280px;
     height: 180px;
     background: white;
-    padding: 10px;
-    box-sizing: border-box;
     opacity: 0;
     transition: 0.5s;
     z-index: 1;
@@ -108,10 +163,8 @@ body {
     opacity: 1;
 }
 
-/* IMAGE INSIDE LETTER */
 .letter img {
     max-width: 100%;
-    max-height: 100%;
     border-radius: 8px;
     opacity: 0;
     transform: scale(2);
@@ -127,72 +180,93 @@ body {
 
 <body>
 
-<div class="scene">
-    <div class="envelope" id="envelope"></div>
+<!-- 🔐 LOCK -->
+<div class="lock-container" id="lock">
+    <div class="lock" id="lockIcon">🔒</div>
+    <div class="display" id="display"></div>
 
+    <div class="keypad">
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button onclick="press('0')">0</button>
+        <button class="delete" onclick="del()">Del</button>
+        <button class="wide" onclick="enterCode()">Enter</button>
+    </div>
+</div>
+
+<!-- 💌 SCENE -->
+<div class="scene" id="scene">
+    <div class="envelope" id="envelope"></div>
     <div class="letter" id="letter">
-        <!-- 🔽 THAY LINK ẢNH TẠI ĐÂY -->
-        <img src="letter.jpg" alt="Love">
+        <img src="letter.jpg">
     </div>
 </div>
 
 <script>
+/* ===== LOCK LOGIC ===== */
+let input = "";
+const correct = "2601";
 
+function press(n) {
+    if (input.length < 4) {
+        input += n;
+        display.textContent = "•".repeat(input.length);
+    }
+}
+
+function del() {
+    input = input.slice(0, -1);
+    display.textContent = "•".repeat(input.length);
+}
+
+function enterCode() {
+    if (input === correct) {
+        lockIcon.textContent = "🔓";
+        lock.classList.add("fall");
+        scene.classList.add("show");
+    } else {
+        input = "";
+        display.textContent = "";
+        alert("Sai mã rồi 😝");
+    }
+}
+
+/* ===== HEART + ENVELOPE LOGIC ===== */
 function createRandomHearts(count = 12) {
-    const scene = document.querySelector('.scene');
-
     for (let i = 0; i < count; i++) {
         const heart = document.createElement('span');
         heart.className = 'heart';
         heart.textContent = '❤️';
-
-        // vị trí xuất hiện ngẫu nhiên trong scene
-        const startX = Math.random() * scene.clientWidth;
-        const startY = Math.random() * 80 + 150;
-
-        heart.style.left = startX + 'px';
-        heart.style.top = startY + 'px';
-
-        // hướng bay ngẫu nhiên
-        const moveX = (Math.random() * 400 - 200) + 'px';
-        const moveY = -(Math.random() * 500 + 500) + 'px';
-
-        heart.style.setProperty('--x', moveX);
-        heart.style.setProperty('--y', moveY);
-
-        // ngẫu nhiên size & thời gian
-        const size = Math.random() * 20 + 30;
-        const duration = Math.random() * 2 + 3;
-
-        heart.style.fontSize = size + 'px';
-        heart.style.animationDuration = duration + 's';
-
+        heart.style.left = Math.random() * 300 + 'px';
+        heart.style.top = '150px';
+        heart.style.setProperty('--x', (Math.random() * 400 - 200) + 'px');
+        heart.style.setProperty('--y', -(Math.random() * 500 + 500) + 'px');
+        heart.style.fontSize = (Math.random() * 20 + 30) + 'px';
+        heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
         scene.appendChild(heart);
-
-        // tự xoá
-        setTimeout(() => heart.remove(), duration * 1000);
+        setTimeout(() => heart.remove(), 4000);
     }
 }
 
-
 let clickCount = 0;
-
-const envelope = document.getElementById('envelope');
-const letter = document.getElementById('letter');
-
 envelope.addEventListener('click', () => {
     clickCount++;
-
-    if (clickCount === 1) {
-        envelope.classList.add('open');
-    } 
-    else if (clickCount === 2) {
+    if (clickCount === 1) envelope.classList.add('open');
+    if (clickCount === 2) {
         envelope.classList.add('fall');
         letter.classList.add('show');
-        createRandomHearts(15); // 💖 TRÁI TIM BAY
+        createRandomHearts(20);
     }
 });
 </script>
 
 </body>
 </html>
+
