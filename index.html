@@ -117,7 +117,8 @@ body {
 }
 
 .envelope::before {
-    content: '';
+    content: '❤️';
+    font-size: 50px;
     position: absolute;
     top: 0;
     left: 0;
@@ -129,20 +130,8 @@ body {
     transform-origin: top;
     transition: 0.5s;
 }
-.envelope::after {
-    content: "❤️";
-    position: absolute;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 32px;
-    pointer-events: none;
-}
 
 .envelope.open::before {
-    transform: rotateX(180deg);
-}
-.envelope.open::after {
     transform: rotateX(180deg);
 }
 
